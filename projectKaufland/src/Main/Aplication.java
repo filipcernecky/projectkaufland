@@ -12,6 +12,8 @@ import Items.Food;
 import Items.Fruit;
 import Items.Pastry;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 import java.io.IOException;
 import java.sql.SQLException;
 
@@ -27,7 +29,7 @@ public class Aplication {
         return app;
     }
 
-    public void example () throws BillException, IOException, SQLException {
+    public void example () throws BillException, IOException, SQLException, TransformerException, ParserConfigurationException  {
         Bill bill = new Bill();
 
         bill.print();
@@ -58,8 +60,10 @@ public class Aplication {
         System.out.println("Total items: "+bill.getCount());
         System.out.println("Total price: "+bill.getFinalPrice());
         System.out.println("Total items: "+bill.getCount());
-        
-        Internet.getUSDrate();
+        System.out.println("Price in USD: " + bill.getTotalPriceUSD());
+
+        Xml totalBill = new Xml();
+        totalBill.createXML(bill);
         bill.end();
     }
 }
