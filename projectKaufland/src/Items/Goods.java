@@ -1,12 +1,13 @@
 package Items;
 
-public class Goods  extends Item implements PcsInterface{
+public class Goods extends Item implements Piece {
     private int amount;
     private Category type;
-    public Goods(String name, double price, int amount, Category category) {
+
+    public Goods(String name, double price, int amount, Category type) {
         super(name, price);
         this.amount=amount;
-        this.type=category;
+        this.type=type;
     }
 
     @Override
@@ -17,5 +18,14 @@ public class Goods  extends Item implements PcsInterface{
     @Override
     public int getAmount() {
         return amount;
+    }
+
+    @Override
+    public void setAmount(double amount) {
+
+    }
+
+    public Category getType() {
+        return type;
     }
 }

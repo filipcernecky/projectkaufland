@@ -13,6 +13,11 @@ import java.util.List;
 
 import Items.Piece;
 import Items.Fruit;
+import Items.Goods;
+import Items.Bottle;
+import Items.Draft;
+import Items.Pastry;
+import Items.Sweet;
 import Main.Globals;
 import Main.Internet;
 import Items.DraftInterface;
@@ -113,6 +118,20 @@ public class Bill {
         double totalPrice = getFinalPrice();
         double sum = totalPrice * Internet.getUSDrate();
         return sum;
+    }
+    public void updateItem(Item toUpdate, Item oldItem){
+        if(toUpdate instanceof DraftInterface) {
+            double newVolume = ((DraftInterface) toUpdate).getVolume()+ ((DraftInterface) oldItem).getVolume();
+            ((DraftInterface) toUpdate).setVolume(newVolume);
+        }
+        else if(toUpdate instanceof Fruit){
+            double newWeight = ((Fruit) toUpdate).getWeight() + ((Fruit) oldItem).getWeight();
+            ((Fruit) toUpdate).setWeight(newWeight);
+        }
+        else if(toUpdate instanceof Piece){
+            double newAmount = ((Piece) toUpdate).getAmount() + ((Piece) oldItem).getAmount();
+            ((Piece) toUpdate).setAmount(newAmount);
+        }
     }
 
 }
