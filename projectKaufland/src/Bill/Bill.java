@@ -133,5 +133,13 @@ public class Bill {
             ((Piece) toUpdate).setAmount(newAmount);
         }
     }
+    public Item checkingItem(Item item){
+        for (Item item2: list) {
+            if (item.getName().toLowerCase().equals(item2.getName().toLowerCase()) && item.getClass().getName().equals(item2.getClass().getName())) {
+                return item2;
+            }
+        }
+        return null;
+    }
 
 }
