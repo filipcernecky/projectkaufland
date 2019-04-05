@@ -1,16 +1,17 @@
 package Bill;
 
-import Exception.BillException;
 import java.io.IOException;
 import java.sql.SQLException;
-
-import Database.Database;
-import Items.Item;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import Exception.BillException;
+
+import Database.Database;
+import Database.MongoDatabase;
+
+import Items.Item;
 import Items.Piece;
 import Items.Fruit;
 import Items.Goods;
@@ -22,17 +23,27 @@ import Main.Globals;
 import Main.Internet;
 import Items.DraftInterface;
 
+
 public class Bill {
     private List<Item> list;
     private int count;
     private  double sum;
     private boolean open;
     private  Date date;
+    private static int counter=0;
+    private int id;
+
+    public int getId() {
+        return id;
+    }
 
     public Bill() {
         this.list = new ArrayList<>();
         count = 0;
         open=true;
+        sum=0;
+        counter++;
+        id=counter;
     }
 
     public List<Item> getList() {
@@ -47,6 +58,8 @@ public class Bill {
         if(open){
             Database db = Database.getInstanceDB();
             db.insertNewBill(this);
+            MongoDatabaseD mngDb = MongoDatabaseD.getInstanceMongoDB();
+            mngDb.addBillToMongoDB(this);
 
         }
         else {
@@ -67,7 +80,13 @@ public class Bill {
                 String message = "Bill is full, max is " + Globals.MAXITEMS + " items.";
                 throw new BillException(message);
             }
-            list.add(item);
+            Item existujuci = checkingItem(item);
+            if(existujuci == null){
+                list.add(item);
+            }
+            else{
+                updateItem(existujuci,item);
+            }
             count++;
 
         }
@@ -85,7 +104,6 @@ public class Bill {
         for(Item item: list){
             sum+=item.getTotalPrice();
         }
-
         return sum;
 
     }
@@ -119,6 +137,7 @@ public class Bill {
         double sum = totalPrice * Internet.getUSDrate();
         return sum;
     }
+
     public void updateItem(Item toUpdate, Item oldItem){
         if(toUpdate instanceof DraftInterface) {
             double newVolume = ((DraftInterface) toUpdate).getVolume()+ ((DraftInterface) oldItem).getVolume();
@@ -133,6 +152,7 @@ public class Bill {
             ((Piece) toUpdate).setAmount(newAmount);
         }
     }
+
     public Item checkingItem(Item item){
         for (Item item2: list) {
             if (item.getName().toLowerCase().equals(item2.getName().toLowerCase()) && item.getClass().getName().equals(item2.getClass().getName())) {

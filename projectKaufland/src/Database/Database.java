@@ -12,6 +12,8 @@ import Items.Piece;
 import Items.DraftInterface;
 import Items.Fruit;
 
+import static Main.Globals.*;
+
 public class Database {
 
     private static Database dtbs = new Database();
@@ -26,7 +28,7 @@ public class Database {
     private Connection getConnection(){
         Connection connection;
         try {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.jdbc.Driver"); //Class.forName(driver)
             System.out.println("Connection Complete");
             connection = DriverManager.getConnection(url,userName,password);
             return connection;

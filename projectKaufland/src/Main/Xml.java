@@ -6,8 +6,8 @@ import org.w3c.dom.Node;
 import Bill.Bill;
 import Items.Item;
 import Items.Piece;
-import Items.DraftInterface;
 import Items.Fruit;
+import Items.DraftInterface;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -31,7 +31,7 @@ public class Xml {
         Document doc = dBuilder.newDocument();
 
         Element rootElement = doc.createElement("Bill");
-        Node nd = doc.appendChild(rootElement);
+        Node ND = doc.appendChild(rootElement);
 
         Date date = new java.sql.Date(bill.getDate().getTime());
         Date time = new java.sql.Time(bill.getDate().getTime());
@@ -91,6 +91,10 @@ public class Xml {
 
         }
 
+        Element billId = doc.createElement("IdOfBill");
+        billId.appendChild(doc.createTextNode(String.valueOf(bill.getId())));
+        rootElement.appendChild(billId);
+
         Element totalPrice = doc.createElement("Price");
         rootElement.appendChild(totalPrice);
 
@@ -107,7 +111,7 @@ public class Xml {
         transformer.setOutputProperty(OutputKeys.INDENT, "yes");
         transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
         DOMSource source = new DOMSource(doc);
-        StreamResult result = new StreamResult(new File("bill.xml"));
+        StreamResult result = new StreamResult(new File("billXML.xml"));
         transformer.transform(source, result);
 
     }
